@@ -1,0 +1,10 @@
+{
+  "id": "T_gitignore_python_tool_caches",
+  "description": "在根 .gitignore 增加常见 Python/pytest/ruff 缓存忽略项（__pycache__/, *.pyc, .pytest_cache/, .ruff_cache/），并添加最小 pytest 断言防回归；make check 验收。",
+  "risk_level": "low",
+  "parallel_count": 1,
+  "estimated_loc": 50,
+  "files_involved": 2,
+  "acceptance": "make check 通过；git status 不再显示 pyc/__pycache__/.pytest_cache/.ruff_cache 相关未跟踪项；pytest 断言 .gitignore 包含这些规则。"
+}
+

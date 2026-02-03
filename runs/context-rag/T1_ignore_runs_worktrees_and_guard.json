@@ -1,0 +1,10 @@
+{
+  "id": "T1_ignore_runs_worktrees_and_guard",
+  "description": "在根 .gitignore 中新增忽略 runs/worktrees/，并添加最小 pytest 用例断言该规则存在以防回归（make check 验收）。",
+  "risk_level": "low",
+  "parallel_count": 1,
+  "estimated_loc": 40,
+  "files_involved": 2,
+  "acceptance": "make check 通过；git status 不再显示 runs/worktrees/ 未跟踪；pytest 断言 .gitignore 包含 runs/worktrees/ 规则。"
+}
+

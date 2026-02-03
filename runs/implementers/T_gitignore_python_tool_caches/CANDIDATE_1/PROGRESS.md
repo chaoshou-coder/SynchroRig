@@ -18,7 +18,7 @@
 | 3 | T002_ENFORCE_CANDIDATE_SCOPE_AND_DOCS | 增加守卫与文档/测试，防回归并行隔离契约 | medium | PASS | 2026-02-03 23:46:08 | `make check`：All checks passed! |
 | 4 | T003_FINAL_ISOLATION_GATE | 补齐 worktree/preflight/run-check -RepoRoot 后最终隔离机制门禁 | low | PASS | 2026-02-04 00:01:52 | `make check`：All checks passed!（60 passed, 7 skipped） |
 | 5 | T1_ignore_runs_worktrees_and_guard | 忽略 `runs/worktrees/` 并加 pytest 门禁防回归 | low | PASS | 2026-02-04 00:19:48 | `make check`：All checks passed!（61 passed, 7 skipped） |
-| 6 | T_gitignore_python_tool_caches | 忽略 Python/pytest/ruff 缓存（__pycache__/ 等）并加 pytest 门禁 | low | PASS | 2026-02-04 00:27:56 | `make check`：All checks passed!（62 passed, 7 skipped） |
+| 6 | T_gitignore_python_tool_caches | 忽略 Python/pytest/ruff 缓存（__pycache__/ 等）并加 pytest 门禁 | low | IN_PROGRESS | 2026-02-04 00:21:19 | N/A |
 
 ## 时间线（实时日志）
 
@@ -43,10 +43,9 @@
 | 2026-02-03 23:41:53 | T002_ENFORCE_CANDIDATE_SCOPE_AND_DOCS | implementers | implement | 候选 CANDIDATE_2：worktree.ps1 -Help 守卫测试 + 脚本支持 | `make test`：60 passed, 7 skipped | verifier：运行 make check |
 | 2026-02-03 23:44:51 | T002_ENFORCE_CANDIDATE_SCOPE_AND_DOCS | orchestrator | verify | 发起 verifier 验收 | `make check` | 等待 verdict |
 | 2026-02-03 23:46:08 | T002_ENFORCE_CANDIDATE_SCOPE_AND_DOCS | verifier | verify | 运行 `make check` 验收 | PASS：All checks passed! | 大任务完成 |
-| 2026-02-04 00:01:52 | T003_FINAL_ISOLATION_GATE | verifier | verify | 补齐 worktree/preflight/run-check -RepoRoot 后最终门禁验收 | PASS：All checks passed!（60 passed, 7 skipped） | 隔离机制门禁通过 |
+| 2026-02-04 00:01:52 | T003_FINAL_ISOLATION_GATE | verifier | verify | 补齐 worktree/preflight/run-check -RepoRoot 后最终隔离机制门禁验收 | PASS：All checks passed!（60 passed, 7 skipped） | 隔离机制门禁通过 |
 | 2026-02-04 00:12:20 | T1_ignore_runs_worktrees_and_guard | planner | plan | 收尾任务规划：忽略 runs/worktrees/ 并加测试门禁 | 输出 1 任务（pc=1） | context-rag → implementers |
 | 2026-02-04 00:16:56 | T1_ignore_runs_worktrees_and_guard | implementers | implement | 新增 gitignore 门禁测试并忽略 runs/worktrees/ | `make test`：先红后绿（61 passed, 7 skipped） | 交给 verifier 运行 `make check` |
 | 2026-02-04 00:19:48 | T1_ignore_runs_worktrees_and_guard | verifier | verify | 运行 `make check` 门禁验收 | PASS：All checks passed!（61 passed, 7 skipped） | 任务完成 |
 | 2026-02-04 00:21:19 | T_gitignore_python_tool_caches | planner | plan | 收尾：忽略 Python/pytest/ruff 缓存并加门禁测试 | 输出 1 任务（pc=1） | context-rag → implementers |
 | 2026-02-04 00:24:53 | T_gitignore_python_tool_caches | implementers | implement | 新增 Python 缓存 gitignore 门禁测试并补充忽略规则 | `make test`：先红后绿（62 passed, 7 skipped） | 交给 verifier 运行 `make check` |
-| 2026-02-04 00:27:56 | T_gitignore_python_tool_caches | verifier | verify | 运行 `make check` 门禁验收 | PASS：All checks passed!（62 passed, 7 skipped） | 任务完成 |
