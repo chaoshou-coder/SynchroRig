@@ -1,0 +1,18 @@
+{
+  "id": "A_progress_tools_configurable_paths",
+  "description": "为 `progress_tools.py` 增加可配置写入路径（event/task/render 支持 `--progress/--summary` 或等价 env），并补充 pytest 规格，确保未传参时保持 legacy 默认行为。",
+  "acceptance": [
+    "新增/修改 `tests/` pytest：在当前实现下运行 `make test` 必须失败（red），失败原因与“未支持路径参数/env”相关。",
+    "最小实现后再次运行 `make test` 必须通过（green）。",
+    "运行 `make check` 必须通过且输出包含 `All checks passed!`（由 verifier 采信）。",
+    "向后兼容：不传路径参数且未设置相关 env 时，写入路径与当前默认一致；传参或设置 env 时，写入到指定路径且不触碰根单例文件。"
+  ],
+  "risk": "medium",
+  "parallel_count": 2,
+  "estimated_loc": 220,
+  "files_involved": [
+    ".cursor/scripts/progress_tools.py",
+    "tests/test_progress_tools_cli.py"
+  ]
+}
+

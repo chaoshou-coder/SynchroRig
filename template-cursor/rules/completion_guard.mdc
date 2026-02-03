@@ -1,0 +1,37 @@
+---
+description: "Completion gate to prevent premature stopping before all tasks are PASS/BLOCKED."
+alwaysApply: true
+---
+
+# Completion Guard (Anti-Premature-Stop)
+
+目标：防止“大任务”在 todo/task 未完成时就结束回复，导致 Cursor 提示“回答结束”。
+
+## 硬性规则（违反即失败）
+
+- 只要当前大任务存在任何未完成的 planner tasks（非 PASS 且非 BLOCKED），Orchestrator **不得结束**。
+- “生成 todo list / plan”不等于完成；必须进入执行循环并持续推进。
+
+## 完成门禁（每次准备结束回复前必做）
+
+在你准备结束任何一轮输出前，必须执行如下检查：
+
+1) 是否已经完成初始化（`SUMMARY.md` 与 `PROGRESS.md` 已重置并写入 big task 元信息）？
+2) planner 是否已产出 tasks？
+3) 对每个 task：
+   - 是否已运行 implementers（按 parallel_count）？
+   - 是否已运行 verifier（基于 verification skill 的机器证据）？
+   - 是否已将状态写入 `PROGRESS.md` 的 `## 子任务清单（PR 粒度）`？
+4) 是否仍存在未 PASS/BLOCKED 的 task？
+   - 若是：**禁止结束**，继续下一步 subagent 调用
+
+## 资源/限制处理（允许“暂停”，不允许“结束”）
+
+如果因为上下文/输出限制/工具暂不可用，无法在本轮继续推进：
+
+- 必须输出 `RESUME_PROMPT`（用户可直接粘贴继续）
+- 必须把下一步（phase、task_id、next_action）追加到：
+  - `SUMMARY.md` 的 `## 运行日志（按时间追加）`
+  - `PROGRESS.md` 的 `## 时间线（实时日志）`
+- 并在 `PROGRESS.md` 的 `## 子任务清单（PR 粒度）` 中把当前 task 标为 `IN_PROGRESS`（或 `BLOCKED`）
+

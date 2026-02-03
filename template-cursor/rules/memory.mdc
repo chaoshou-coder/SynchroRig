@@ -1,0 +1,63 @@
+---
+description: "Externalized memory: initialize SUMMARY/PROGRESS per big task; append run logs and machine evidence."
+alwaysApply: true
+---
+
+# Externalized Memory Rule
+
+目标：把关键决策与验收证据写入物理文件，避免长对话导致的上下文遗失。
+
+## Source of Truth
+
+- `PROGRESS.md`：项目进度与验收证据（Verifier 负责，建议 append-only）
+- `SUMMARY.md`：压缩后的工作记忆（由 compression skill 负责追加）
+
+## 大任务初始化（必须）
+
+每当开始一个新的“大任务需求”（用户直接输入，不手动调用 subagents）：
+
+- 必须**覆盖重写**初始化 `SUMMARY.md` 与 `PROGRESS.md`
+- 初始化内容必须包含：big_task_title / big_task_requirement / started_at
+
+推荐通过脚本执行（Windows）：`.\.cursor\scripts\init-big-task.ps1 -Title "<title>" -Requirement "<raw or summary>"`
+
+## PROGRESS.md 必填字段（每个 task 一行/一条记录）
+
+至少包含：
+
+- **Task ID**：与 Planner 输出一致
+- **Status**：PASS / FAIL / BLOCKED / IN_PROGRESS
+- **描述**：一句话说明本次变更（简体中文）
+- **关键决策**：关键决策/约束（简体中文，尽量短）
+- **接口契约**：触及的公开接口/契约（简体中文，尽量短；无则 N/A）
+- **验证证据**：机器证据摘要（至少包含运行命令与关键输出；PASS 必须包含 `All checks passed!`）
+
+## 写入时机
+
+- Verifier 通过验收（PASS）后必须写入/更新 `PROGRESS.md`
+- 若多次失败（FAIL）也应记录主要失败原因与下一步
+
+## SUMMARY.md 追加格式（由 compression skill 负责）
+
+必须包含：
+
+- 任务 ID / 标题
+- 变更概览
+- 关键决策 / 约束
+- 触及的公开接口/契约
+- 变更文件列表
+- 验证证据（命令 + `All checks passed!`）
+
+## 动态更新（必须）
+
+为满足“每个 subagent 的操作都动态更新”：
+
+- 主 Agent（workflow orchestrator）在每次 subagent 调用后追加一条 `SUMMARY.md` 运行日志（高层摘要，简体中文）
+- 同时在 `PROGRESS.md` 的 `## 时间线（实时日志）` 下追加事件记录，必须包含：
+  - 系统时间（精确到秒，格式：`YYYY-MM-DD HH:mm:ss`）
+  - `Subagent`（orchestrator/planner/implementers/verifier）
+  - `Phase`（plan/implement/verify/fix/other）
+  - 做了什么（简体中文一句话）
+  - 结果/证据（尽量短）
+  - 下一步（尽量短）
+

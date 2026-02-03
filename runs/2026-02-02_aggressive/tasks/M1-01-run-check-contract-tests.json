@@ -1,0 +1,30 @@
+{
+  "id": "M1-01-run-check-contract-tests",
+  "title": "M1：run-check 强契约（严格模式）规格化 + pytest 合约测试",
+  "description": "为跨平台入口 run-check.ps1/.sh 定义严格模式的稳定 JSON 输出字段、退出码语义(0/1/2)、PASS banner 必含 \"All checks passed!\"，并用 pytest 以黑盒方式先写失败用例锁定契约（门禁只读，修复/格式化必须显式触发）。",
+  "risk": "high",
+  "parallel_count": 3,
+  "acceptance": {
+    "commands": [
+      ".\\\\.cursor\\\\skills\\\\verification\\\\scripts\\\\run-check.ps1 -Mode strict -Format json",
+      "./.cursor/skills/verification/scripts/run-check.sh --mode strict --format json"
+    ],
+    "criteria": [
+      "pytest 新增用例在当前实现下失败（red），失败原因与契约缺失一致（字段/退出码/banner/只读语义）",
+      "严格模式输出为 JSON（可解析），包含固定字段集合（至少：mode、status、exit_code、checks[]、evidence、started_at、ended_at、duration_ms）",
+      "PASS 时输出 banner 且包含精确子串 \"All checks passed!\"",
+      "退出码：0=PASS，1=CHECK_FAIL，2=INFRA_ERROR（例如依赖缺失/脚本异常）"
+    ]
+  },
+  "estimated_loc": 220,
+  "files_involved": [
+    "tests/test_run_check_contract.py",
+    "tests/conftest.py",
+    "doc/aggressive_architecture.md"
+  ],
+  "public_contracts_touched": [
+    "run-check CLI：strict/json/exit-code 语义",
+    "run-check JSON schema（字段集合与含义）",
+    "PASS banner 必含 \"All checks passed!\""
+  ]
+}

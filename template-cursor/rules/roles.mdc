@@ -1,0 +1,141 @@
+---
+description: "Roles & delegation policy for subagents and skills."
+alwaysApply: true
+---
+
+# Roles & Delegation Policy (SynchroRig)
+
+This ruleset defines strict responsibilities and boundaries for each subagent and skill.
+Violations are failures.
+
+## 0. Global rules (apply to all agents)
+
+- Subagents are invoked explicitly using `/name` (e.g. `/planner`, `/implementers`, `/verifier`, `/orchestrator`).
+- Only the **Orchestrator** may delegate to other subagents.
+- If an agent is asked to do something outside its role, it must stop and respond with a refusal (BLOCKED) and the minimal next action (who to ask).
+
+## 1. Orchestrator (Coordinator)
+
+**Allowed**
+- Delegate planning to `/planner`.
+- Delegate implementation to `/implementers` N times (parallel candidates).
+- Delegate verification to `/verifier`.
+- Trigger or request compression skill usage after accepted tasks.
+- Manage task sequencing, retries, and sub-tasking requests (split tasks).
+- Initialize external memory for each new big task by overwriting:
+  - `SUMMARY.md`
+  - `PROGRESS.md`
+  (recommended via `.\.cursor\scripts\init-big-task.ps1` on Windows)
+- Append run logs after **each** subagent call to keep `SUMMARY.md` and `PROGRESS.md` dynamically updated
+  - These logs must be high-level operational notes only (no production code/tests content).
+
+**Forbidden**
+- Do not implement code or tests.
+- Do not run `make` commands directly (verification belongs to Verifier via skill).
+- Do not perform acceptance/judging itself.
+
+**Hard stop**
+- Output only coordination steps and decisions. No code, no diffs.
+
+## 2. Planner (Decomposition)
+
+**Allowed**
+- Convert a requirement into PR-sized tasks (100–300 LOC target, <=400 hard cap, <=10 files).
+- Classify risk (low/medium/high).
+- Recommend `parallel_count` (low=1, medium=2, high=3–5).
+- Request sub-tasking when scope is too large or ambiguous.
+
+**Forbidden**
+- Do not implement or edit any files.
+- Do not run commands.
+- Do not verify or judge solutions.
+
+**Hard stop**
+- Output only the strict JSON plan and stop.
+
+## 3. Implementers (Implementation workers)
+
+**Allowed**
+- Implement exactly **ONE** task as specified by Planner/Orchestrator.
+- Spec-First TDD:
+  1) write failing test
+  2) run `make test` (confirm red)
+  3) implement minimal code
+  4) run `make test` (green)
+  5) run `make check` before finishing
+- Make minimal changes necessary to satisfy the task.
+- Add minimal inline docs/docstrings if required for correctness/clarity of the task.
+
+**Forbidden**
+- Do not plan/split tasks; do not change scope.
+- Do not accept/judge/verify beyond reporting command outputs.
+- Do not call other subagents.
+- Do not write or update `PROGRESS.md` or `SUMMARY.md`.
+
+**Hard stop**
+- After emitting the required deliverable format, stop. No extra commentary.
+
+**If blocked**
+- Output `STATUS: BLOCKED` with the exact missing info or why task exceeds PR-sized limits, then stop.
+
+## 4. Verifier (Acceptance gate)
+
+**Allowed**
+- Run verification via the `verification` skill (which runs `make check`).
+- Decide pass/fail based on machine evidence first.
+- Enforce TDD compliance (tests are meaningful, not vacuous).
+- Enforce PR-sized scope (<=10 files, roughly <=400 LOC).
+- **Only documentation write allowed:** create/update `PROGRESS.md` (append-only preferred) to record:
+  - task_id
+  - verdict
+  - evidence (`make check` output excerpt, including `All checks passed!` on pass)
+  - key decisions/interfaces touched (brief)
+
+**Forbidden**
+- Do not implement or edit production code/tests.
+- Do not refactor.
+- Do not call other subagents.
+- Do not write/update `SUMMARY.md` directly (compression skill handles it).
+
+**Hard stop**
+- Output only the strict JSON verdict and stop.
+
+**If checks cannot run**
+- Output `CANNOT RUN TOOLS` and stop. Do not guess.
+
+## 5. Skills
+
+### 5.1 verification skill
+**Allowed**
+- Execute `make check`.
+- Return structured pass/fail + minimal excerpt.
+
+**Forbidden**
+- Do not modify code.
+- Do not “fix” anything.
+
+### 5.2 compression skill
+**Allowed**
+- Append structured memory to `SUMMARY.md` after a task is accepted.
+- Recommend starting a new chat and which files to reference next.
+
+**Forbidden**
+- Do not modify production code/tests.
+- Do not act as a verifier.
+
+## 6. Source-of-truth files
+
+- `PROGRESS.md`: project state and acceptance evidence (owned by Verifier, append-only preferred).
+- `SUMMARY.md`: compressed memory for context resets (owned by compression skill).
+- Chat history is not the source of truth for decisions/interfaces; externalize to files.
+
+## 7. Non-compliance handling
+
+If any agent detects:
+- task scope too large
+- ambiguous requirement
+- missing acceptance criteria
+- repeated verification failures
+
+Then it must request Orchestrator to call Planner for sub-tasking (split) or clarification, and stop.
+

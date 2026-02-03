@@ -1,0 +1,27 @@
+{
+  "id": "M1-03-run-check-fast-mode",
+  "title": "M1：fast/strict 双模式（fast 更快但同契约）",
+  "description": "补齐 fast 模式：选择 checks 子集与更严格的时间预算，输出字段与退出码语义保持与 strict 一致；fast 可用于候选迭代，但验收以 strict 为准。",
+  "risk": "medium",
+  "parallel_count": 2,
+  "acceptance": {
+    "commands": [
+      ".\\\\.cursor\\\\skills\\\\verification\\\\scripts\\\\run-check.ps1 -Mode fast -Format json",
+      ".\\\\.cursor\\\\skills\\\\verification\\\\scripts\\\\run-check.ps1 -Mode strict -Format json"
+    ],
+    "criteria": [
+      "fast 输出 JSON 字段集合与 strict 完全一致（mode 值不同）",
+      "fast 执行的 checks 子集可配置/可追踪（JSON evidence 中可见具体执行了哪些）",
+      "strict 仍为最终门禁；verification skill 等价入口调用 strict 时可稳定通过"
+    ]
+  },
+  "estimated_loc": 180,
+  "files_involved": [
+    "tests/test_run_check_fast_mode.py",
+    "synchrorig/run_check/config.py",
+    "synchrorig/run_check/runner.py"
+  ],
+  "public_contracts_touched": [
+    "run-check mode=fast 行为定义（同契约不同 checks 集）"
+  ]
+}

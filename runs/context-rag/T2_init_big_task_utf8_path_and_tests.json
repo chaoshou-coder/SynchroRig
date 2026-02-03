@@ -1,0 +1,9 @@
+{
+  "id": "T2_init_big_task_utf8_path_and_tests",
+  "description": "增强 init-big-task.ps1：支持 -TitlePath/-RequirementPath 从 UTF-8 文件读标题与需求，默认拒绝 implementers 运行；新增 pytest 回归测试验证路径参数与 UTF-8 输出。",
+  "risk_level": "medium",
+  "parallel_count": 2,
+  "estimated_loc": 250,
+  "files_involved": 4,
+  "acceptance": "make check 通过；脚本支持 -TitlePath/-RequirementPath；角色防护生效；pytest 覆盖路径参数与 UTF-8 输出。"
+}

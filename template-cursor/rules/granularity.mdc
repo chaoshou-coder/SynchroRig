@@ -1,0 +1,47 @@
+---
+description: "PR-sized granularity and risk classification (LOC/files constraints; parallel_count guidance)."
+alwaysApply: true
+---
+
+# PR-Sized Granularity Rule
+
+目标：强制把任何需求拆分为可独立验收的 PR/CL 粒度任务，避免上下文漂移与返工。
+
+## 硬性约束（违反即失败）
+
+- 单个任务目标：
+  - **100–300 LOC**（推荐区间）
+  - **≤400 LOC**（硬上限）
+  - **≤10 个文件**（硬上限）
+  - **单一意图**（single intent）
+  - **可独立验证**（必须能通过机器证据验证）
+- 任何任务若超出以上约束，必须触发 **sub-tasking**（请求 Planner 拆分）。
+
+## 风险分类（用于决定并行实现数 N）
+
+- **low**：
+  - 文档、轻量重构、明显 bugfix、无新接口
+  - 推荐并行数 \(N=1\)
+- **medium**：
+  - 新增小特性、引入少量新逻辑、少量接口变更
+  - 推荐并行数 \(N=2\)
+- **high**：
+  - 新接口/架构、复杂逻辑、跨模块改动、验收标准容易被误解
+  - 推荐并行数 \(N=3–5\)
+
+## 任务描述的最低信息量（Planner 输出必须包含）
+
+- **id**：稳定可引用（用于 PROGRESS 记录）
+- **description**：一句话描述“做什么 + 为什么”
+- **acceptance**（隐含或显式）：
+  - 通过哪些测试/命令验证（至少 `make check`）
+  - 新增/修改的公开接口（若有）
+- **estimated_loc / files_involved**：粗略量化，辅助约束判断
+
+## 触发 sub-tasking 的信号
+
+- 需要同时改动多个不相关的模块才能完成
+- 需要新增多个端到端场景才能覆盖验收
+- 需要引入新依赖或新脚手架
+- 任务描述无法写出清晰可测试的验收标准
+

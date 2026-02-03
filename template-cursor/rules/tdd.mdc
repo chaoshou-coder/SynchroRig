@@ -1,0 +1,37 @@
+---
+description: "Spec-First TDD: tests must fail first, then implement, then pass make check."
+alwaysApply: true
+---
+
+# Spec-First TDD Rule
+
+目标：任何实现都必须以可机器验证的“规格”起步，禁止先写实现再补测试。
+
+## Implementers（强制流程）
+
+1. **先写测试（必须红）**
+   - 新增或修改 `tests/` 下的 pytest 用例
+   - 测试必须在当前实现下 **失败**（red），且失败原因与需求相关
+2. **本地验证红**
+   - 运行 `make test`（或等价命令）并确认失败
+   - 若测试意外通过：说明测试无效，必须重写到能失败为止
+3. **最小实现变绿**
+   - 仅做满足测试所需的最小代码修改
+   - 再次运行 `make test`，必须通过（green）
+4. **最终验收**
+   - 运行 `make check`
+   - 只有出现 `All checks passed!` 才算完成
+
+## Verifier（强制门禁）
+
+- 验收以机器证据为准：必须通过 verification skill（运行 `run-check.ps1/.sh`）。
+- 若 `make check` 失败：
+  - 仅允许指出失败原因、要求修复、或请求 Planner 拆分任务
+  - 禁止“主观放行”
+
+## 禁止事项
+
+- 禁止无断言/与需求无关的“摆设测试”
+- 禁止通过跳过/xfail 来规避失败（除非任务明确要求）
+- 禁止引入与任务无关的大规模重构
+

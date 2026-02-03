@@ -1,0 +1,31 @@
+{
+  "id": "M1-02-run-check-strict-impl",
+  "title": "M1：实现严格门禁（只读）并满足合约测试",
+  "description": "实现 run-check 严格门禁的最小可用版本：统一 orchestrator/verifier 可调用入口，聚合 checks 执行结果与证据，输出合约 JSON；默认只读（不自动修复/不自动格式化），仅在显式修复命令时才改动工作区。",
+  "risk": "high",
+  "parallel_count": 3,
+  "acceptance": {
+    "commands": [
+      ".\\\\.cursor\\\\skills\\\\verification\\\\scripts\\\\run-check.ps1 -Mode strict -Format json",
+      "./.cursor/skills/verification/scripts/run-check.sh --mode strict --format json"
+    ],
+    "criteria": [
+      "上一任务的 pytest 合约测试全部通过（green）",
+      "严格模式失败时 exit_code=1 且 checks[] 中标记失败项并给出简短 reason",
+      "脚本异常/依赖缺失等基础设施错误时 exit_code=2 且 status=INFRA_ERROR",
+      "默认不执行任何写操作（例如不运行 autofix/format）；写操作仅可由单独显式命令触发（命令与模式分离）"
+    ]
+  },
+  "estimated_loc": 280,
+  "files_involved": [
+    ".cursor/skills/verification/scripts/run-check.ps1",
+    ".cursor/skills/verification/scripts/run-check.sh",
+    "synchrorig/run_check/__init__.py",
+    "synchrorig/run_check/runner.py",
+    "pyproject.toml"
+  ],
+  "public_contracts_touched": [
+    "run-check 跨平台入口路径与参数（Mode/Format 或等价）",
+    "严格门禁输出 JSON 的字段与退出码"
+  ]
+}

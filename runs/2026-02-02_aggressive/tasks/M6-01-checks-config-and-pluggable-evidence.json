@@ -1,0 +1,29 @@
+{
+  "id": "M6-01-checks-config-and-pluggable-evidence",
+  "title": "M6：checks 列表配置化 + 证据收集器可替换（最小可用）",
+  "description": "引入 checks 配置文件（仓库内声明 checks 列表/顺序/是否属于 fast），并抽象 evidence collector 接口以允许替换（本仓库默认实现收集 stdout/stderr/版本信息/文件指纹）。",
+  "risk": "high",
+  "parallel_count": 3,
+  "acceptance": {
+    "commands": [
+      ".\\\\.cursor\\\\skills\\\\verification\\\\scripts\\\\run-check.ps1 -Mode strict -Format json"
+    ],
+    "criteria": [
+      "strict 运行使用配置文件决定 checks 列表（无需改代码即可调整顺序/启用禁用）",
+      "evidence collector 可通过配置选择实现（默认实现存在且可工作）",
+      "pytest 覆盖：配置解析错误 -> exit_code=2；配置变更可影响 checks[]"
+    ]
+  },
+  "estimated_loc": 300,
+  "files_involved": [
+    "synchrorig/run_check/config.py",
+    "synchrorig/run_check/evidence.py",
+    "synchrorig/run_check/runner.py",
+    "synchrorig_checks.toml",
+    "tests/test_checks_config.py"
+  ],
+  "public_contracts_touched": [
+    "checks 配置文件格式与位置（仓库契约）",
+    "evidence collector 插件选择机制（配置契约）"
+  ]
+}

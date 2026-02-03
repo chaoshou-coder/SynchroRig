@@ -1,0 +1,25 @@
+{
+  "id": "rules-001-clarify-sum-progress-ownership-precedence",
+  "description": "在规则层面新增并明确“SUMMARY.md/PROGRESS.md 的所有权、可写角色、以及与任务文本禁写约束冲突时的优先级/解释规则”，确保 implementers/verifier 继续禁写而 orchestrator 必须初始化并持续追加日志。",
+  "acceptance": [
+    "仅修改 `.cursor/rules/*.mdc`（优先 `roles.mdc` 作为总则入口），明确：implementers/verifier 禁止修改 SUMMARY/PROGRESS；orchestrator 允许且要求初始化/追加；并定义冲突解释：任务/用户文本中的“不要修改 SUMMARY/PROGRESS”默认仅约束 implementers/verifier，若与编排强制写入冲突则对 orchestrator 无效且应触发重新规划/说明。",
+    "运行 `make check` 并通过，输出包含 `All checks passed!`"
+  ],
+  "constraints": {
+    "allowed_paths": [
+      ".cursor/rules/",
+      "tests/"
+    ],
+    "forbidden": [
+      "修改生产代码",
+      "修改 SUMMARY.md 或 PROGRESS.md（实现者/验收者）"
+    ]
+  },
+  "risk_level": "medium",
+  "parallel_count": 1,
+  "estimated_loc": 120,
+  "files_involved": [
+    ".cursor/rules/roles.mdc"
+  ]
+}
+
