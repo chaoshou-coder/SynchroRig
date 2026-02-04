@@ -1,5 +1,3 @@
-完整项目总览内容（repo临时名：SpecGrind，之后可改；结构比照ReqX）
-Markdown
 # 项目总述 (Project Overview)
 
 ## 目录
@@ -12,7 +10,7 @@ Markdown
 
 ## 1. 项目简介
 
-**SpecGrind** 是一个Cursor IDE专用的Subagents工作流模板，专为Vibe Coding设计。它的核心使命是解决手动prompt模拟Agent协作导致的低效问题—— **token浪费、上下文漂移、粒度失控、返工循环** 。
+**SynchroRig** 是一个 Cursor IDE 专用的 Subagents 工作流模板，专为 Vibe Coding 设计。它的核心使命是解决手动prompt模拟Agent协作导致的低效问题—— **token浪费、上下文漂移、粒度失控、返工循环** 。
 
 在传统Cursor Agent使用中，开发者往往通过角色扮演prompt手动实现开发/验收循环，容易导致任务拆分不均、测试标准模糊。本模板利用Cursor原生Subagents、Skills、Rules，通过 **Planner-Implementers-Verifier** 结构，实现Spec-First TDD驱动的自主闭环开发：Agent先写红测试验证需求→并行实现→自动化验收grind直到全绿。
 
@@ -89,10 +87,10 @@ Grind迭代 ：失败时自动子任务分解或重试，直到全check pass，�
 
 ## 5. 使用指南
 
-克隆repo到本地项目根目录。
-手动复制.template-cursor文件夹到项目根，重命名为.cursor（cp -r template-cursor .cursor）。
-在Cursor中打开项目，确认Subagents/Skills/Rules加载。
-配置模型：Settings → Models，选择对应subagent模型（GPT-5.2 codex extra high / Claude Opus 4.5）。
-创建Makefile和tests/（参考示例）。
-Agent Mode启动prompt: "Use planner to decompose the following requirement into PR-sized tasks, then proceed with implementers and verifier grind."
-运行端到端测试：给一个小需求，观察完整cycle。
+1. 克隆本仓库到本地。
+2. 将 `template-cursor/` 复制到项目根并重命名为 `.cursor/`（Windows: `Copy-Item -Recurse -Force .\template-cursor .\.cursor`；Linux/Mac: `cp -r template-cursor .cursor`）。
+3. 在 Cursor 中打开项目，确认 Subagents / Skills / Rules 已加载。
+4. 配置模型：Settings → Models，为各 subagent 选择对应模型（见 `template-cursor/agents/`）。
+5. 创建或沿用 `Makefile` 与 `tests/`（本仓库含示例）。
+6. 在 Agent Chat 中直接输入大任务需求，由 Orchestrator 自动调用 planner → implementers → verifier。
+7. 运行 `make check` 验证环境；给一个小需求可观察完整 cycle。

@@ -118,12 +118,10 @@ check: format lint test
 定义PROGRESS.md模板（Markdown表格：任务ID | 描述 | 状态 | 关键决策 | 接口契约 | 验证证据）。（已完成并对齐初始化脚本）
 
 
-## 5. 整体开发ToDoList（独立文件：DEVELOPMENT_TODO.md）
+## 5. 仓库与发布
 
-- 补齐所有待定prompt/scripts（以上各模块ToDo）。
-- 在空Python项目完整跑通一个端到端需求（从用户prompt到最终pass）。
-- 量化指标测试：粒度（LOC/任务）、grind迭代次数、token消耗、最终代码通过率。
-- 定repo最终名（需简洁、独特、体现Spec-First + Grind特色）。
-- 发布前清理：移除所有占位，确保配置可直接复制运行。
+- 项目名：**SynchroRig**（Cursor 工作流模板，Spec-First TDD + Planner-Implementers-Verifier）。
+- 不提交内容（见 `.gitignore`）：`.cursor/`、`runs/`、`x.com/`、`REPORT.md` 及 Python/工具缓存。
+- 用户克隆后：复制 `template-cursor/` 为 `.cursor/` 即可使用；`make check` 验证示例链路。
 
 

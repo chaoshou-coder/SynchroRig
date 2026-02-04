@@ -1,6 +1,22 @@
+# 本仓库自用 Cursor 配置（与 template-cursor 同步后复制为 .cursor）
 .cursor/
+
+# 运行产物与工作区（不提交）
+runs/
 runs/worktrees/
+
+# 个人/草稿笔记（不提交）
+x.com/
+
+# 大任务生成的报告（可本地再生）
+REPORT.md
+
+# Python / 工具缓存
 __pycache__/
 *.pyc
 .pytest_cache/
 .ruff_cache/
+
+# 开发用测试脚本
+tests/
+

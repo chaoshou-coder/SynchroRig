@@ -8,6 +8,8 @@ def test_gitignore_ignores_runs_worktrees():
 
     lines = gitignore_path.read_text(encoding="utf-8").splitlines()
     allowed_rules = {
+        "runs",
+        "runs/",
         "runs/worktrees",
         "runs/worktrees/",
         "runs/worktrees/*",
@@ -39,6 +41,4 @@ def test_gitignore_ignores_python_tool_caches():
     required_rules = {"__pycache__/", "*.pyc", ".pytest_cache/", ".ruff_cache/"}
     missing = sorted(required_rules - rules)
     if missing:
-        raise AssertionError(
-            "Expected .gitignore to include: " + ", ".join(missing)
-        )
+        raise AssertionError("Expected .gitignore to include: " + ", ".join(missing))

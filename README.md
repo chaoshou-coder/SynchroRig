@@ -85,10 +85,12 @@ Windows 可用脚本（也可由 Orchestrator 按规则自动执行）：
 - 在 `Cursor Settings → Rules` 里展开 **Project Rules**
 - 仍不显示时，Reload Window / 重启 Cursor
 
-## 仓库结构（示例）
+## 仓库结构
 
-- `template-cursor/`：可复制到任意项目的模板
-- `.cursor/`：本仓库自用的 Cursor 配置（与 template 同步）
-- `Makefile` / `tests/`：用于演示 `make check` 的最小可运行示例
-- `PROGRESS.md` / `SUMMARY.md`：外部化记忆与验收证据
+- `template-cursor/`：可复制到任意项目的模板（复制为 `.cursor/` 后使用）
+- `doc/`：规格与参考文档（context-rag、consultation、规则等）
+- `Makefile` / `tests/` / `synchrorig/`：用于演示 `make check` 的最小可运行示例
+- `PROGRESS.md` / `SUMMARY.md`：外部化记忆与验收证据（每次大任务会重置）
+
+以下内容由 `.gitignore` 排除，不会提交到仓库：`.cursor/`、`runs/`、`x.com/`、`REPORT.md` 及 Python/工具缓存。
 
