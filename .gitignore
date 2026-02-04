@@ -17,6 +17,9 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 
+# 测试代码（不提交）
+tests/
 # 开发用测试脚本
 tests/
+
 
