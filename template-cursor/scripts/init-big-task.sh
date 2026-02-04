@@ -40,8 +40,6 @@ cat > "$REPO_ROOT/PROGRESS.md" <<EOF
 
 - **标题**：${TITLE}
 - **开始时间**：${STARTED_AT}
-- **当前时间**：${STARTED_AT}
-- **总进度**：0/0（0%） [--------------------]
 
 ### 需求原文/摘要
 
@@ -54,8 +52,8 @@ ${REQ}
 
 ## 时间线（实时日志）
 
-| 时间(YYYY-MM-DD HH:mm:ss) | Subagent | Phase | 做了什么 | 结果/证据 | 下一步 |
-|---|---|---|---|---|---|
+| 时间(YYYY-MM-DD HH:mm:ss) | Task ID | Subagent | Phase | 做了什么 | 结果/证据 | 下一步 |
+|---|---|---|---|---|---|---|
 
 EOF
 

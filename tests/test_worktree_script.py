@@ -5,8 +5,9 @@ from pathlib import Path
 
 import pytest
 
-ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / ".cursor" / "scripts" / "worktree.ps1"
+from conftest import CURSOR_ROOT, ROOT
+
+SCRIPT = CURSOR_ROOT / "scripts" / "worktree.ps1"
 
 
 def find_powershell() -> str | None:

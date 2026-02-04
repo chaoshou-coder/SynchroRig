@@ -1,8 +1,9 @@
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-SCRIPTS_DIR = ROOT / ".cursor" / "scripts"
+from conftest import CURSOR_ROOT, ROOT
+
+SCRIPTS_DIR = CURSOR_ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
 
 import progress_tools  # noqa: E402
@@ -13,13 +14,13 @@ def read_repo_text(relative_path: str) -> str:
 
 
 def test_init_big_task_ps1_omits_time_and_progress_lines():
-    content = read_repo_text(".cursor/scripts/init-big-task.ps1")
+    content = (CURSOR_ROOT / "scripts" / "init-big-task.ps1").read_text(encoding="utf-8")
     assert "- **当前时间**" not in content
     assert "- **总进度**" not in content
 
 
 def test_init_big_task_sh_omits_time_and_progress_lines():
-    content = read_repo_text(".cursor/scripts/init-big-task.sh")
+    content = (CURSOR_ROOT / "scripts" / "init-big-task.sh").read_text(encoding="utf-8")
     assert "- **当前时间**" not in content
     assert "- **总进度**" not in content
 

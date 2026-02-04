@@ -1,7 +1,6 @@
-from pathlib import Path
+from conftest import CURSOR_ROOT
 
-ROOT = Path(__file__).resolve().parents[1]
-RULE_PATH = ROOT / ".cursor" / "rules" / "orchestration.mdc"
+RULE_PATH = CURSOR_ROOT / "rules" / "orchestration.mdc"
 
 
 def test_orchestration_rule_removes_context_rag_precondition():

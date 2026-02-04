@@ -1,8 +1,9 @@
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-SCRIPTS_DIR = ROOT / ".cursor" / "scripts"
+from conftest import CURSOR_ROOT, ROOT
+
+SCRIPTS_DIR = CURSOR_ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
 
 import progress_tools  # noqa: E402

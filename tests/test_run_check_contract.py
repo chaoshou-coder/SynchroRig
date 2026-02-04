@@ -7,9 +7,10 @@ from pathlib import Path
 
 import pytest
 
-ROOT = Path(__file__).resolve().parents[1]
-RUN_CHECK_PS1 = ROOT / ".cursor" / "skills" / "verification" / "scripts" / "run-check.ps1"
-RUN_CHECK_SH = ROOT / ".cursor" / "skills" / "verification" / "scripts" / "run-check.sh"
+from conftest import CURSOR_ROOT, ROOT
+
+RUN_CHECK_PS1 = CURSOR_ROOT / "skills" / "verification" / "scripts" / "run-check.ps1"
+RUN_CHECK_SH = CURSOR_ROOT / "skills" / "verification" / "scripts" / "run-check.sh"
 
 REQUIRED_FIELDS = {
     "mode",
